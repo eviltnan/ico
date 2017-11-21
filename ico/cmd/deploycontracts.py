@@ -6,10 +6,18 @@ from populus import Project
 from ico.deploy import deploy_crowdsale_from_file
 
 
+def tweak_chain(project, deployment_name):
+    with project.get_chain(deployment_name) as chain:
+        chain.wait.timeout = 9999
+
+
 @click.command()
-@click.option('--deployment-name', nargs=1, default="mainnet", help='YAML section name we are deploying. Usual options include "mainnet" or "kovan"', required=True)
+@click.option('--deployment-name', nargs=1, default="mainnet",
+              help='YAML section name we are deploying. Usual options include "mainnet" or "kovan"', required=True)
 @click.option('--deployment-file', nargs=1, help='YAML file definiting the crowdsale', required=True)
-@click.option('--address', nargs=1, help='Deployment address that pays the gas for the deployment cost. This account must exist on Ethereum node you are connected to.', required=True)
+@click.option('--address', nargs=1,
+              help='Deployment address that pays the gas for the deployment cost. This account must exist on Ethereum node you are connected to.',
+              required=True)
 def main(deployment_file, deployment_name, address):
     """Makes a scripted multiple contracts deployed based on a YAML file.
 
@@ -28,6 +36,7 @@ def main(deployment_file, deployment_name, address):
     """
 
     project = Project()
+    tweak_chain(project, deployment_name)
     deploy_crowdsale_from_file(project, deployment_file, deployment_name, address)
     print("All done! Enjoy your decentralized future.")
 
