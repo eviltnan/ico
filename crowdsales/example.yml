@@ -1,5 +1,5 @@
 # A testnet deployment for the crowdsale contracts
-testnet:
+ropsten:
 
     # Chain we are connected to.
     # Either "mainnet" or "ropsten".
@@ -8,7 +8,7 @@ testnet:
 
     # Do we perform deployed contract source code verification on etherscan.io service.
     # This is a semi automatic process using a Firefox browser.
-    verify_on_etherscan: yes
+    verify_on_etherscan: no
 
     solc:
 
@@ -26,7 +26,7 @@ testnet:
         # Note: You need to have correct optmization settings for the compiler
         # in populus.json that matches what EtherScan is expecting.
         #
-        version: v0.4.14+commit.c2215d46
+        version: v0.4.18+commit.9cf6e910
 
         #
         # We supply these to EtherScan as the solc settings we used to compile the contract.
@@ -59,7 +59,7 @@ testnet:
         team_multisig:
             contract_name: MultiSigWallet
             contract_file: GnosisWallet.sol
-            address: "0x40a05d4ce308bf600cb275d7a3e9113518f59c54"
+            address: "2087c59c9524bc0a0e1088a422537d74b7b413d1"
         #
         # Pre-ICO fund collector
         #
@@ -98,8 +98,8 @@ testnet:
             contract_name: CrowdsaleToken
             contract_file: CrowdsaleToken.sol
             arguments:
-                _name: Example-testnet
-                _symbol: EXA
+                _name: TensorTrade-testnet
+                _symbol: TEN
                 _initialSupply: 0
                 _decimals: 18  # Ethereum tokens are standardizing around 18 decimals
                 _mintable: true  # Tokens will be dynamically created over the token sale
@@ -116,8 +116,8 @@ testnet:
             contract_name: MilestonePricing
             contract_file: MilestonePricing.sol
             arguments:
-                _preicoPrice: "{{ to_wei('0.008', 'ether') }}"
-                _preicoContractAddress: "{{contracts.preico.address}}"
+#                _preicoPrice: "{{ to_wei('0.008', 'ether') }}"
+#                _preicoContractAddress: "{{contracts.preico.address}}"
                 _milestones:
                     - 1492272000
                     - "{{ to_wei('0.010', 'ether') }}"
