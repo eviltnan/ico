@@ -1,8 +1,8 @@
 # To deploy this file
 #
-kovan:
+ropsten:
 
-    chain: kovan
+    chain: ropsten
 
     # Use automated Chrome to verify all contracts on etherscan.io
     verify_on_etherscan: yes
@@ -39,7 +39,7 @@ kovan:
         team_multisig:
             contract_name: MultiSigWallet
             contract_file: GnosisWallet.sol
-            address: "0x40a05d4ce308bf600cb275d7a3e9113518f59c54"
+            address: "2087c59c9524bc0a0e1088a422537d74b7b413d1"
         #
         # Token contract
         #
@@ -62,8 +62,8 @@ kovan:
             contract_name: BurnableCrowdsaleToken
             contract_file: BurnableCrowdsaleToken.sol
             arguments:
-                _name: ""
-                _symbol: ""
+                _name: TensorTrade Token
+                _symbol: TEN
                 _initialSupply: "{{ 100000000000*10**18 }}"
                 _decimals: 18
                 _mintable: false
@@ -176,6 +176,7 @@ kovan:
         # funds flow in the multisig wallet.
         confirm_tx(crowdsale.transact({"from": deploy_address, "value": to_wei("0.01", "ether")}).buy())
 
-        # As the last action, after successful deployment, set the right token symbol and name so that it shows in a blockchain explorer
-        confirm_tx(token.transact({"from": deploy_address}).setTokenInformation("MooToken", "MOO"))
+        # As the last action, after successful deployment,
+        # set the right token symbol and name so that it shows in a blockchain explorer
+        confirm_tx(token.transact({"from": deploy_address}).setTokenInformation("TensorTrade Token", "TEN"))
 
