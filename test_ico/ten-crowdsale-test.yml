@@ -39,9 +39,11 @@ ropsten:
         team_multisig:
             contract_name: MultiSigWallet
             contract_file: GnosisWallet.sol
-            address:
-                - "0xe5E832BA5d83E7eb9841076993D051c079c37f34"
-                - "0x85363df4031E72412A7Ac949285b180d8afe3c4b"
+            arguments:
+                _owners:
+                    - "0xe5E832BA5d83E7eb9841076993D051c079c37f34"
+                    - "0x85363df4031E72412A7Ac949285b180d8afe3c4b"
+                _required: 2
 
         #
         # Token contract
@@ -181,5 +183,5 @@ ropsten:
 
         # As the last action, after successful deployment,
         # set the right token symbol and name so that it shows in a blockchain explorer
-        confirm_tx(token.transact({"from": deploy_address}).setTokenInformation(token.name, token.symbol))
+        confirm_tx(token.transact({"from": deploy_address}).setTokenInformation("TensorTrade Test Token", "TEN0"))
 
