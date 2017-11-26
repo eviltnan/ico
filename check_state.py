@@ -15,7 +15,7 @@ def main():
     owner_address = "0x2087c59c9524bc0a0e1088a422537d74b7b413d1"
 
     # Where did we deploy our token
-    contract_address = "0x61ccdfa6a56ace8ff1f2ddb2bb61fb3b50c21418"
+    contract_address = "0x6b5111eb3ab92cf760a80948217d5b9de6734002"
 
     project = populus.Project()
     with project.get_chain(chain_name) as chain:
@@ -27,16 +27,13 @@ def main():
         # Goes through geth account unlock process if needed
         if is_account_locked(web3, owner_address):
             request_account_unlock(chain, owner_address, None)
-        chain.registrar.set_contract_address("BurnableCrowdsaleToken", contract_address)
-        Contract = chain.provider.get_base_contract_factory("BurnableCrowdsaleToken")
+        chain.registrar.set_contract_address("AllocatedCrowdsale", contract_address)
+        Contract = chain.provider.get_base_contract_factory("AllocatedCrowdsale")
         contract = Contract(address=contract_address)
 
-        transaction = {"from": owner_address}
-        print("Attempting to release the token transfer")
-        txid = contract.transact(transaction).releaseTokenTransfer()
-        print("TXID", txid)
-        check_succesful_tx(web3, txid)
-        print("Token released")
+        print("Checking state...")
+        state = contract.call().getState()
+        print("Crowdsale state: %s" % state)
 
 
 if __name__ == "__main__":
