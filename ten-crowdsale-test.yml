@@ -116,9 +116,9 @@ ropsten:
                 _token: "{{contracts.token.address}}"
                 _pricingStrategy: "{{contracts.pricing_strategy.address}}"
                 _multisigWallet: "{{contracts.team_multisig.address}}"
-                _start: "{{ timestamp(datetime(2017, 11, 26, 14, 30)) }}"
-                _end: "{{ timestamp(datetime(2017, 11, 27, 00, 00)) }}"
-                _minimumFundingGoal: "{{ to_wei(15000, 'ether') }}"
+                _start: "{{ timestamp(datetime(2017, 11, 26, 21, 00)) }}"
+                _end: "{{ timestamp(datetime(2017, 11, 27, 18, 00)) }}"
+                _minimumFundingGoal: "{{ to_wei(21, 'ether') }}"
                 _beneficiary: "{{deploy_address}}"
         #
         # Because deploy_address controls whole supply,
