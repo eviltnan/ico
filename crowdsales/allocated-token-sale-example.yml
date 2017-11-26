@@ -63,7 +63,7 @@ ropsten:
             contract_file: BurnableCrowdsaleToken.sol
             arguments:
                 _name: TensorTrade Token
-                _symbol: TEN
+                _symbol: TEN2
                 _initialSupply: "{{ 100000000000*10**18 }}"
                 _decimals: 18
                 _mintable: false
@@ -113,8 +113,8 @@ ropsten:
                 _token: "{{contracts.token.address}}"
                 _pricingStrategy: "{{contracts.pricing_strategy.address}}"
                 _multisigWallet: "{{contracts.team_multisig.address}}"
-                _start: "{{ timestamp(datetime(2099, 7, 12, 13, 00)) }}"
-                _end: "{{ timestamp(datetime(2099, 7, 26, 13, 00)) }}"
+                _start: "{{ timestamp(datetime(2017, 11, 26, 14, 30)) }}"
+                _end: "{{ timestamp(datetime(2017, 11, 27, 00, 00)) }}"
                 _minimumFundingGoal: "{{ to_wei(15000, 'ether') }}"
                 _beneficiary: "{{deploy_address}}"
         #
@@ -156,11 +156,11 @@ ropsten:
         # and get tokens before the actual start time.
         confirm_multiple_txs( \
           crowdsale.transact({"from": deploy_address}).setEarlyParicipantWhitelist(deploy_address, True), \
-          crowdsale.transact({"from": deploy_address}).setEarlyParicipantWhitelist("0x6d997eDcA04282950416FA380d834f360fC36eBb", True) \
+          crowdsale.transact({"from": deploy_address}).setEarlyParicipantWhitelist("0x84766026935672d3cab0b84a2332c3fb45e5d26b", True) \
         )
 
         # We set a special price, outside ETH tranches, for a presale contract
-        confirm_tx(pricing_strategy.transact({"from": deploy_address}).setPreicoAddress("0x6d997eDcA04282950416FA380d834f360fC36eBb", 2083333333333))
+        confirm_tx(pricing_strategy.transact({"from": deploy_address}).setPreicoAddress("0x84766026935672d3cab0b84a2332c3fb45e5d26b", 2083333333333))
 
     # Sanity check
     verify_actions: |
