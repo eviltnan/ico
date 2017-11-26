@@ -133,6 +133,15 @@ contract Crowdsale is CrowdsaleBase {
   }
 
   /**
+   * The basic entry point to participate the crowdsale process without payload
+   *
+   * Pay for funding, get invested tokens back in the sender address.
+   */
+  function() public payable {
+    buy();
+  }
+
+  /**
    * Set policy do we need to have server-side customer ids for the investments.
    *
    */
