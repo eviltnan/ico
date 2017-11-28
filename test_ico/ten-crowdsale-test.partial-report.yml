@@ -1,0 +1,187 @@
+
+chain: ropsten
+
+    # Use automated Chrome to verify all contracts on etherscan.io
+verify_on_etherscan: yes
+browser_driver: chrome
+
+solc:
+
+        # This is the Solidity version tag we verify on EtherScan.
+        # For available versions see
+        # https://kovan.etherscan.io/verifyContract2
+        #
+        # See values in Compiler drop down.
+        # You can also get the local compiler version with:
+        #
+        #     solc --version
+        #
+        # Note that for EtherScan you need to add letter "v" at the front of the version
+        #
+        # Note: You need to have correct optmization settings for the compiler
+        # in populus.json that matches what EtherScan is expecting.
+        #
+  version: v0.4.14+commit.c2215d46
+
+        #
+        # We supply these to EtherScan as the solc settings we used to compile the contract.
+        # They must match values in populus.json compilication / backends section.
+        #
+  optimizations:
+    optimizer: true
+    runs: 500     
+
+contracts:
+        # This is the address of the multisig wallet where the paymnts eventually land
+  team_multisig: !!omap
+  - contract_name: MultiSigWallet
+  - contract_file: GnosisWallet.sol
+  - arguments: !!omap
+    - _owners:
+      - '0xe5E832BA5d83E7eb9841076993D051c079c37f34'
+      - '0x85363df4031E72412A7Ac949285b180d8afe3c4b'
+    - _required: 2
+  - address: '0x69def877c81edadf554ec985e96d96bb8d3eacfb'
+  - constructor_args: '0x000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000002000000000000000000000000e5e832ba5d83e7eb9841076993d051c079c37f3400000000000000000000000085363df4031e72412a7ac949285b180d8afe3c4b'
+  - libraries: {}
+  - etherscan_link: https://ropsten.etherscan.io/address/0x69def877c81edadf554ec985e96d96bb8d3eacfb
+        #
+        # Token contract
+        #
+        # This contract represents ERC-20 token.
+        # It has transfer lock up functionality to prevent the token to be transferable
+        # until the ICO is over.
+        #
+        # We create the whole token supply upfront and no more token minting
+        # happens ever.
+        #
+        # Token has 18 decimals and supply of 1B tokens.
+        #
+        # Token supply is one billion tokens.
+        #
+        # Name and symbol are not set yet. They are set later. In
+        # the case of the deployment fails and we need redeploy
+        # we do not create unnecessary entries in token explorers.
+        #
+  token: !!omap
+  - contract_name: BurnableCrowdsaleToken
+  - contract_file: BurnableCrowdsaleToken.sol
+  - arguments: !!omap
+    - _name: TensorTrade Test Token
+    - _symbol: TEN0
+    - _initialSupply: 100000000000000000000000000000
+    - _decimals: 18
+    - _mintable: false
+  - address: '0x4a886461499dd6a54861379234376ce1a6816814'
+  - constructor_args: '0x00000000000000000000000000000000000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000e00000000000000000000000000000000000000001431e0fae6d7217caa000000000000000000000000000000000000000000000000000000000000000000000120000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001654656e736f725472616465205465737420546f6b656e00000000000000000000000000000000000000000000000000000000000000000000000000000000000454454e3000000000000000000000000000000000000000000000000000000000'
+  - libraries:
+      SafeMathLib: '0x9674c951b805a654c547dfe5a3979f496e6ebcaa'
+  - etherscan_link: https://ropsten.etherscan.io/address/0x4a886461499dd6a54861379234376ce1a6816814
+        #
+        # Pricing strategy.
+        #
+        # We use ETH tranches. People who buy in in the first
+        # tranches get 20% and 10% bonus tokens.
+        #
+  pricing_strategy: !!omap
+  - contract_name: EthTranchePricing
+  - contract_file: EthTranchePricing.sol
+  - arguments: !!omap
+    - _tranches:
+      - 0
+      - 2272727272727
+      - 10000000000000000000
+      - 2380952380952
+      - 20000000000000000000
+      - 2500000000000
+      - 999999999999999000000000000000000
+      - 0
+  - address: '0xf359f23e14cc92bc1ecbfd4cbad6aeb2ba41ecbb'
+  - constructor_args: '0x00000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000008000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000211291a0d170000000000000000000000000000000000000000000000008ac7230489e800000000000000000000000000000000000000000000000000000000022a5bd22618000000000000000000000000000000000000000000000001158e460913d0000000000000000000000000000000000000000000000000000000000246139ca800000000000000000000000000000000000000314dc6448d932ae0a456589c00000000000000000000000000000000000000000000000000000000000000000000'
+  - libraries:
+      SafeMathLib: '0x2f89b2cbc9cc1e39c342b11940d7e8554fcbd2d9'
+  - etherscan_link: https://ropsten.etherscan.io/address/0xf359f23e14cc92bc1ecbfd4cbad6aeb2ba41ecbb
+  crowdsale: !!omap
+  - contract_name: AllocatedCrowdsale
+  - contract_file: AllocatedCrowdsale.sol
+  - arguments: !!omap
+    - _token: '0x4a886461499dd6a54861379234376ce1a6816814'
+    - _pricingStrategy: '0xf359f23e14cc92bc1ecbfd4cbad6aeb2ba41ecbb'
+    - _multisigWallet: '0x69def877c81edadf554ec985e96d96bb8d3eacfb'
+    - _start: 1511730000
+    - _end: 1511805600
+    - _minimumFundingGoal: 21000000000000000000
+    - _beneficiary: '0x0dbc7f3504bc285f24816d1b50deee8b9c1e116f'
+  - address: '0x33d0c39473c466958cdebfac65631d981fe3bfec'
+  - constructor_args: '0x0000000000000000000000004a886461499dd6a54861379234376ce1a6816814000000000000000000000000f359f23e14cc92bc1ecbfd4cbad6aeb2ba41ecbb00000000000000000000000069def877c81edadf554ec985e96d96bb8d3eacfb000000000000000000000000000000000000000000000000000000005a1b2b50000000000000000000000000000000000000000000000000000000005a1c52a0000000000000000000000000000000000000000000000001236efcbcbb3400000000000000000000000000000dbc7f3504bc285f24816d1b50deee8b9c1e116f'
+  - libraries:
+      SafeMathLib: '0x552a1f76ac8eeb073ead80c366c5128eac7692fc'
+  - etherscan_link: https://ropsten.etherscan.io/address/0x33d0c39473c466958cdebfac65631d981fe3bfec
+        #
+        # Because deploy_address controls whole supply,
+        # we do not create any supply dynamically,
+        # we do not need a finalizer.
+        #
+  finalize_agent: !!omap
+  - contract_name: NullFinalizeAgent
+  - contract_file: NullFinalizeAgent.sol
+  - arguments: !!omap
+    - _crowdsale: '0x33d0c39473c466958cdebfac65631d981fe3bfec'
+  - address: '0xa6a87e21f27bbbfbda982e9af00a964fa2c1678d'
+  - constructor_args: '0x00000000000000000000000033d0c39473c466958cdebfac65631d981fe3bfec'
+  - libraries: {}
+  - etherscan_link: https://ropsten.etherscan.io/address/0xa6a87e21f27bbbfbda982e9af00a964fa2c1678d
+
+    # Post-deployment actions connect contracts together.
+post_actions: |2
+
+  # Allow crowdsale contract to sell its token
+  token.transact({"from": deploy_address}).approve(crowdsale.address, 70000000000*10**18)
+
+  # Make sure crowdsale contract and these accounts
+  # can transfer tokens despite transfer lock up
+  token.transact({"from": deploy_address}).setTransferAgent(team_multisig.address, True)
+  token.transact({"from": deploy_address}).setTransferAgent(crowdsale.address, True)
+  token.transact({"from": deploy_address}).setTransferAgent(finalize_agent.address, True)
+  token.transact({"from": deploy_address}).setTransferAgent(deploy_address, True)
+
+  # Do not do nothing at the end of the crowdsale
+  confirm_tx(crowdsale.transact({"from": deploy_address}).setFinalizeAgent(finalize_agent.address))
+
+  # Owner can release the token transfer when they fel its the time
+  confirm_tx(token.transact({"from": deploy_address}).setReleaseAgent(deploy_address))
+
+  # Set token upgrade master to team multisig to give the new token path
+  confirm_tx(token.transact({"from": deploy_address}).setUpgradeMaster(team_multisig.address))
+
+  # Allow test buys from these accounts before token sale begins.
+  # The latter one is a presale contract address.
+  # Presale contract (PreICOProxyBuyer) can move in funds
+  # and get tokens before the actual start time.
+  confirm_multiple_txs( \
+    crowdsale.transact({"from": deploy_address}).setEarlyParicipantWhitelist(deploy_address, True), \
+    crowdsale.transact({"from": deploy_address}).setEarlyParicipantWhitelist("0xcC172870FA0b34F9A04a2F797A2975E684cD42E4", True) \
+  )
+
+  # We set a special price, outside ETH tranches, for a presale contract
+  confirm_tx(pricing_strategy.transact({"from": deploy_address}).setPreicoAddress("0xcC172870FA0b34F9A04a2F797A2975E684cD42E4", 2083333333333))
+
+# Sanity check
+verify_actions: |
+  assert token.call().owner().lower() == deploy_address.lower()
+  assert token.call().released() == False
+  assert crowdsale.call().owner().lower() == deploy_address.lower()
+  assert crowdsale.call().multisigWallet().lower() == team_multisig.address.lower()
+  assert finalize_agent.call().isSane()
+  assert crowdsale.call().getState() == CrowdsaleState.PreFunding   # PreFunding for the final, as it is deployed pre-opening
+
+  # Do a test buy using a test address.
+  # This ensures are variables are set and the
+  # funds flow in the multisig wallet.
+  confirm_tx(crowdsale.transact({"from": deploy_address, "value": to_wei("0.01", "ether")}).buy())
+
+  # As the last action, after successful deployment,
+  # set the right token symbol and name so that it shows in a blockchain explorer
+  confirm_tx(token.transact({"from": deploy_address}).setTokenInformation(token.name, token.symbol))
+
+deploy_address: '0x0dbc7f3504bc285f24816d1b50deee8b9c1e116f'
